@@ -6,37 +6,44 @@ import java.lang.Math;
 import java.lang.Number;
 import java.util.Random;
 
-interface Sort<T>{
-    public List<T> sort(List<T> input);
+interface Sort{
+    public List<Integer> sort(List<Integer> input);
 }
 
-class Quick<T> implements Sort<T>{
-    public List<T> sort(List<T> input){
-        List<T> out;
+class Quick implements Sort{
+    public List<Integer> sort(List<Integer> input){
+        List<Integer> out;
         int size = input.size();
+        System.out.println("size:"+size);
         //List<T> out = new ArrayList<T>(size);
-        out = qsort(0, size, input);
+        out = qsort(input);
         return out;
     };
 
-    public List<T> qsort(int left, int right, List<T> list){
-        if (left > right){
+    public List<Integer> qsort(List<Integer> list){
+        if (list.size() <= 1){
             return list;
         }
-        int curPos = left;
-        T curValue = list.get(curPos);
-        for(int i = left; i < right; i++){
-            if ((Number)curValue.compareTo(list.get(i)) > 0){
-                T tmp = curValue;
-                curValue = list.get(i);
-                list.set(i, tmp);
-                curPos = i;
-            }
-        } 
 
-        list = qsort(left, curPos, list);
-        list = qsort(curPos + 1, right, list);
-        return list;
+        List<Integer> leftList = new ArrayList<Integer>();
+        List<Integer> rightList = new ArrayList<Integer>();
+        int curPos = 0;
+        Integer curValue = list.get(curPos);
+        for(int i = 1; i < list.size(); i++){
+            Integer val = list.get(i);
+            if (curValue.compareTo(val) >= 0){
+                leftList.add(val);
+            }else{
+                rightList.add(val);
+            }
+        }
+
+        System.out.println("left size:"+leftList.size()+",right size:"+rightList.size());
+        leftList= qsort(leftList);
+        rightList = qsort(rightList);
+        leftList.add(curValue);
+        leftList.addAll(rightList);
+        return leftList;
     }
 }
 
@@ -47,17 +54,21 @@ public class QuickSort{
             List<Integer> testList = new ArrayList<Integer>(100);
             Random rand = new Random();
 
-            for (int i=0; i < 100; i++){
+            for (int i=0; i < 10; i++){
                 Integer item = new Integer(rand.nextInt(100));
                 testList.add(item);
             }
 
-            Quick<Integer> qs = new Quick<Integer>();
+            Quick qs = new Quick();
+            for (Integer it : testList){
+                System.out.print(it + ",");
+            }
 
             ArrayList<Integer> out = (ArrayList<Integer>)qs.sort(testList);
             for (Integer inte : out){
                 System.out.print(inte + ",");
             }
+            System.out.println("");
             System.out.println("end");
         }
     }
