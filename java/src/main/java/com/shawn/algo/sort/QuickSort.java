@@ -16,7 +16,8 @@ class Quick implements Sort{
         int size = input.size();
         System.out.println("size:"+size);
         //List<T> out = new ArrayList<T>(size);
-        out = qsort(input);
+        //out = qsort(input);
+        out = qsort(0, size - 1, input);
         return out;
     };
 
@@ -44,6 +45,58 @@ class Quick implements Sort{
         leftList.add(curValue);
         leftList.addAll(rightList);
         return leftList;
+    }
+
+    private List<Integer> qsort(int leftBand, int rightBand, List<Integer> data){
+        if (leftBand >= rightBand){
+            return data;
+        }
+        
+        Integer pivot = data.get(leftBand);
+        int pPos = leftBand;
+       
+        int rPos = rightBand;
+
+        int i = leftBand, j = rightBand;
+
+        Integer tmp; 
+        while (i < j){
+            while (data.get(j).compareTo(pivot) >= 0 && i < j){
+                j--;
+            }
+            // swap 
+            if (i < j){
+                tmp = data.get(i);
+                data.set(i, data.get(j));
+                data.set(j, tmp);
+                System.out.println("data:"+data + ", i="+i+",j="+j+"pivot="+pivot);
+            }
+
+            while (data.get(i).compareTo(pivot) < 0 && i < j){
+                i++;
+            }
+            // swap 
+            if (i < j){
+                tmp = data.get(i);
+                data.set(i, data.get(j));
+                data.set(j, tmp);
+                System.out.println("data:"+data + ", i="+i+",j="+j+"pivot="+pivot);
+            }
+        }
+
+        pPos = i;
+        
+        System.out.println("left:"+leftBand+",right:"+rightBand+",privot:"+pPos);
+        System.out.println("data:"+data);
+        data = qsort(leftBand, pPos, data);
+        data = qsort(pPos + 1, rightBand, data);
+        return data;
+    }
+
+    private void swap(Integer a, Integer b){
+        Integer tmp =  a;
+        a = b;
+        b = tmp;
     }
 }
 
